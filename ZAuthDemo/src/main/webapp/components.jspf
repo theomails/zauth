@@ -1,0 +1,175 @@
+
+
+<!-- Component: client-flow -->
+<script type="text/x-template" id="client-flow-template">
+  	<div class='clientFlow colContent'>
+		<h3>Client-based flow</h3>
+		<p>Here we will demo a client based flow.</p>
+		<p><b>How we set up the client</b></p>
+		<table>
+<tr><td>Client Name</td><td>ZOAuth Demo CLIENT</td></tr>
+<tr><td>Homepage URL</td><td>https://www.google.com</td></tr>
+<tr><td>Authorized Redirect URIs &nbsp;&nbsp;&nbsp;</td><td>https://www.google.com<br/>https://zohooauthdemo.appspot.com</td></tr>
+<tr><td>JavaScript Domain</td><td>https://zohooauthdemo.appspot.com</td></tr>
+		</table>
+</pre>
+		<p><b>Details provided by Zoho</b></p>
+		<table>
+<tr><td>Client ID</td><td>{{clientTypeClientId}}</td></tr>
+<tr><td>Client Secret &nbsp;&nbsp;&nbsp;</td><td>{{clientTypeClientSecret}}<br/><em>Seems this is nowhere used in the client flows!</em></td></tr>
+		</table>
+		<p><b>Scope which we will ask for during Auth</b></p>
+		<table>
+<tr><td>Scope &nbsp;&nbsp;&nbsp;</td><td>{{clientTypeScope}}</td></tr>
+		</table>
+		<br/>
+		<div class='twocols'><span>Access token from URL: &nbsp;&nbsp;</span><input class='grow' type='text' v-model='token' disabled></input></div>
+		<p>Go to auth url: <a :href='clientTypeAuthUrl'>Click here</a></p>
+		<p>Go to auth url, try for quiet refresh: <a :href='clientTypeAuthRefreshUrl'>Click here</a></p>
+	</div>
+</script>
+<script type="text/javascript">
+	Vue.component('client-flow', {
+	  template: '#client-flow-template',
+	  props:['clientTypeClientId', 'clientTypeClientSecret', 'clientTypeScope', 
+		  'clientTypeRedirectUri', 'clientTypeAuthUrl', 'clientTypeAuthRefreshUrl'],
+	  data() {
+	    return { token:'' }
+	  },
+	  mounted() {
+		  var hash = document.location.hash.substring(1); //Drop the first char as well - the #
+		  var hashAsMap = this.hashToMap(hash);
+		  this.token = hashAsMap.access_token;
+	  },
+	  methods: {
+	    hashToMap(hash){
+			var params = hash.split('&');
+			var paramsMap = {};
+			for(var i=0;i<params.length;i++){
+				 param=params[i];
+				 if(param==null || param.length==0) continue;
+				 
+				 var keyval = param.split('=');
+				 paramsMap[ keyval[0] ] = keyval[1];
+			}	 
+			return paramsMap;
+	    }
+	  }
+	});
+</script>
+
+<!-- Component: server-flow -->
+<script type="text/x-template" id="server-flow-template">
+  	<div class='serverFlow colContent'>
+		<h3>Server-based flow</h3>
+		<p>Here we will demo a server based flow.</p>
+		<p><b>How we set up the server</b></p>
+		<table>
+<tr><td>Client Name</td><td>ZOAuth Demo SERVER</td></tr>
+<tr><td>Homepage URL</td><td>https://www.google.com</td></tr>
+<tr><td colspan='2'>Authorized Redirect URIs: </td></tr>
+<tr><td colspan='2'>https://www.google.com<br/>https://zohooauthdemo.appspot.com/oauthcallback/serverflow</td></tr>
+		</table>
+</pre>
+		<p><b>Details provided by Zoho</b></p>
+		<table>
+<tr><td>Client ID</td><td>{{serverTypeClientId}}</td></tr>
+<tr><td>Client Secret &nbsp;&nbsp;&nbsp;</td><td>{{serverTypeClientSecret}}</td></tr>
+		</table>
+		<p><b>Scope which we will ask for during Auth</b></p>
+		<table>
+<tr><td>Scope &nbsp;&nbsp;&nbsp;</td><td>{{serverTypeScope}}</td></tr>
+		</table>
+		<br/>
+		<div>Authorization-grant Code from URL: </div>
+		<div class='twocols'><input class='grow' type='text' v-model='serverCode' disabled></input></div>
+		<div>We used the code to make a POST call and get the tokens: </div>
+		<div class='twocols'><span>Refresh token</span><input class='grow' type='text' v-model='serverRefreshToken' disabled></input></div>
+		<div class='twocols'><span>Access token</span><input class='grow' type='text' v-model='serverAccessToken' disabled></input></div>
+		<p>Go to auth url: <a :href='serverTypeAuthUrl'>Click here</a></p>
+		<p>Go to auth url, try for quiet refresh: <a :href='serverTypeAuthRefreshUrl'>Click here</a></p>
+	</div>
+</script>
+
+<script type="text/javascript">
+	Vue.component('server-flow', {
+	  template: '#server-flow-template',
+	  props:['serverTypeClientId', 'serverTypeClientSecret', 'serverTypeScope', 
+		  'serverTypeRedirectUri', 'serverTypeAuthUrl', 'serverTypeAuthRefreshUrl',
+		  'serverCode', 'serverRefreshToken', 'serverAccessToken'],
+	  data() {
+	    return { token:'' }
+	  },
+	  methods: {
+
+	  }
+	});
+</script>
+
+
+
+<!-- Component: main-content -->
+<script type="text/x-template" id="main-content-template">
+  	<div class='mainContent'>
+		<div class='tworows'>
+			<div class='title'>
+				<h2>Zoho OAuth Demo</h2>
+				<p>These two API clients are just shown below as two different examples.
+				The clients don't work together as a pair. However you can test both at the same time.</p>
+			</div>
+			<div class='twocols grow'>
+				<div class='grow'> 
+					<client-flow 
+						:clientTypeClientId='clientTypeClientId' 
+						:clientTypeClientSecret='clientTypeClientSecret'
+						:clientTypeScope='clientTypeScope'
+						:clientTypeRedirectUri='clientTypeRedirectUri'
+						:clientTypeAuthUrl='clientTypeAuthUrl'
+						:clientTypeAuthRefreshUrl='clientTypeAuthRefreshUrl'>
+					</client-flow> 
+				</div>
+				<div class='grow'> 
+					<server-flow 
+						:serverTypeClientId='serverTypeClientId' 
+						:serverTypeClientSecret='serverTypeClientSecret'
+						:serverTypeScope='serverTypeScope'
+						:serverTypeRedirectUri='serverTypeRedirectUri'
+						:serverTypeAuthUrl='serverTypeAuthUrl'
+						:serverTypeAuthRefreshUrl='serverTypeAuthRefreshUrl'
+						:serverCode='serverCode'
+						:serverRefreshToken='serverRefreshToken'
+						:serverAccessToken='serverAccessToken'>
+					</server-flow> 
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+<script type="text/javascript">
+	Vue.component('main-content', {
+	  template: '#main-content-template',
+	  data() {
+	    return { 
+	    		clientTypeClientId: GlobalConstants.clientTypeClientId,
+				clientTypeClientSecret: GlobalConstants.clientTypeClientSecret, 
+				clientTypeScope: GlobalConstants.clientTypeScope,
+				clientTypeRedirectUri: GlobalConstants.clientTypeRedirectUri,
+				clientTypeAuthUrl: GlobalConstants.clientTypeAuthUrl,
+				clientTypeAuthRefreshUrl: GlobalConstants.clientTypeAuthRefreshUrl,
+				//server
+				serverTypeClientId: GlobalConstants.serverTypeClientId,
+				serverTypeClientSecret: GlobalConstants.serverTypeClientSecret, 
+				serverTypeScope: GlobalConstants.serverTypeScope,
+				serverTypeRedirectUri: GlobalConstants.serverTypeRedirectUri,
+				serverTypeAuthUrl: GlobalConstants.serverTypeAuthUrl,
+				serverTypeAuthRefreshUrl: GlobalConstants.serverTypeAuthRefreshUrl,
+				serverCode: GlobalConstants.serverCode,
+				serverRefreshToken:GlobalConstants.serverRefreshToken,
+				serverAccessToken:GlobalConstants.serverAccessToken
+	  	   }
+	  },
+	  methods: {
+	    check() { this.checked = !this.checked; }
+	  }
+	});
+</script>

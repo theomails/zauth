@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	metadata-complete="true" version="3.1">
+
+
+	<servlet>
+		<servlet-name>OAuthCallback</servlet-name>
+		<servlet-class>net.progressit.zauthdemo.servlets.OAuthServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OAuthCallback</servlet-name>
+		<url-pattern>/oauthcallback/*</url-pattern>
+	</servlet-mapping>
+	<filter>
+		<filter-name>AllToIndexFilter</filter-name>
+		<filter-class>net.progressit.zauthdemo.AllToIndexFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AllToIndexFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/index.jsp</location>
+	</error-page>
+	<session-config>
+		<tracking-mode>COOKIE</tracking-mode>
+	</session-config>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>HTTPSOnly</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>HTTPSOrHTTP</web-resource-name>
+			<url-pattern>*.ico</url-pattern>
+			<url-pattern>/img/*</url-pattern>
+			<url-pattern>/fonts/*</url-pattern>
+			<url-pattern>/css/*</url-pattern>
+		</web-resource-collection>
+		<user-data-constraint>
+			<transport-guarantee>NONE</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+</web-app>

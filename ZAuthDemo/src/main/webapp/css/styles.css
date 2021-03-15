@@ -1,0 +1,46 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+.mainContent{
+	width: 80vw;
+	border: 1px solid lightgray;
+	border-radius: 5px;
+	margin: auto;
+	margin-top: 40px;
+	overflow:auto;
+}
+.title{
+	text-align: center;
+}
+.tworows{
+	display: flex;
+	flex-direction: column;
+	height:100%;
+}
+.twocols{
+	display: flex;
+	
+}
+.grow{
+	flex-grow: 1;
+}
+.colContent{
+	margin: 20px;
+	padding: 20px;
+	border: 1px solid lightgray;
+	border-radius: 5px;
+	height:calc(100% - 40px);
+}
+table{
+	border:1px solid lightgray;
+	border-collapse: collapse;
+}
+tr, td, th{
+	border:1px solid lightgray;
+}
+td, th{
+	padding: 5px
+}
