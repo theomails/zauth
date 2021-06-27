@@ -13,7 +13,7 @@ import okhttp3.HttpUrl;
 
 public class ZAuthV2 {
 	public enum ResponseType { token, code }
-	public enum AccessType { Online, Offline }
+	public enum AccessType { online, offline }
 	public enum Prompt { Consent }
 	public enum GrantType { authorization_code, refresh_token }
 	
@@ -89,9 +89,10 @@ public class ZAuthV2 {
 		private GrantType grantType;
 		private String code;
 		private String refreshToken;
-		public String makeTokenUrl() {
+		private AccessType accessType;
+		private String redirectUri; //Seems zoho mistake. Why need a redirectUri here!!
+		public HttpUrl makeTokenUrl() {
 			List<String> missingMandatory = new ArrayList<>();
-			StringBuilder res = new StringBuilder(200);
 			if(clientId==null || clientId.trim().length()==0) missingMandatory.add("Client ID");
 			if(clientSecret==null || clientSecret.trim().length()==0) missingMandatory.add("Client Secret");
 			if(grantType==null) missingMandatory.add("Grant Type");
@@ -102,20 +103,23 @@ public class ZAuthV2 {
 				throw new RuntimeException("Some mandatory fields are missing: " + missingMandatory);
 			}
 			
-			//Base
-			res.append("https://accounts.zoho.com/oauth/v2/token?");
-			
-			//Mandatory
-			res.append("client_id=").append(clientId);
-			res.append("&clientSecret=").append(clientSecret);
-			res.append("&grantType=").append(grantType);
-			
-			//Conditional mandatory
-			if(grantType==GrantType.authorization_code) res.append("&code=").append(code);
-			else if(grantType==GrantType.refresh_token) res.append("&refreshToken=").append(refreshToken);
-			else throw new RuntimeException("Unhandled GrantType: " + grantType);
-			
-			return res.toString();
+			HttpUrl baseUrl = HttpUrl.parse("https://accounts.zoho.com/oauth/v2/token?");
+			HttpUrl.Builder urlBuilder = baseUrl.newBuilder();
+			urlBuilder.addQueryParameter("client_id", clientId);
+			urlBuilder.addQueryParameter("client_secret", clientSecret);
+			urlBuilder.addQueryParameter("grant_type", grantType.name());
+			urlBuilder.addQueryParameter("redirect_uri", redirectUri); //Unnecessary param - even made mandatory here!
+			if(code!=null) {
+				urlBuilder.addQueryParameter("code", code);
+			}
+			if(refreshToken!=null) {
+				urlBuilder.addQueryParameter("refresh_token", refreshToken);
+			}
+			if(accessType!=null) {
+				urlBuilder.addQueryParameter("access_type", accessType.name());
+			}
+			HttpUrl url = urlBuilder.build();
+			return url;
 		}
 
 	}
