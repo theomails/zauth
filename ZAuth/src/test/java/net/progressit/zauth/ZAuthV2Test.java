@@ -52,9 +52,9 @@ public class ZAuthV2Test {
 				.grantType(GrantType.authorization_code)
 				.clientSecret("122c324d3496d5d777ceeebc129470715fbb856b7")
 				.code("1000.86a03ca5dbfccb7445b1889b8215efb0.cad9e1ae4989a1196fe05aa729fcb4e1").build();
-		String expected = "https://accounts.zoho.com/oauth/v2/token?"
-				+ "client_id=1000.GMB0YULZHJK411284S8I5GZ4CHUEX0&clientSecret=122c324d3496d5d777ceeebc129470715fbb856b7"
-				+ "&grantType=authorization_code&code=1000.86a03ca5dbfccb7445b1889b8215efb0.cad9e1ae4989a1196fe05aa729fcb4e1";
+		String expected = "https://accounts.zoho.com/oauth/v2/token?&"
+				+ "client_id=1000.GMB0YULZHJK411284S8I5GZ4CHUEX0&client_secret=122c324d3496d5d777ceeebc129470715fbb856b7&grant_type=authorization_code"
+				+ "&redirect_uri&code=1000.86a03ca5dbfccb7445b1889b8215efb0.cad9e1ae4989a1196fe05aa729fcb4e1";
 		System.out.println("testTokenPost");
 		System.out.println( expected );
 		System.out.println( tokenPost.makeTokenUrl() );
@@ -84,9 +84,9 @@ public class ZAuthV2Test {
 				.grantType(GrantType.refresh_token)
 				.clientSecret("122c324d3496d5d777ceeebc129470715fbb856b7")
 				.refreshToken("1000.18e983526f0ca8575ea9c53b0cd5bb58.1bd83a6f2e22c3a7e1309d96ae439cc1").build();
-		String expected = "https://accounts.zoho.com/oauth/v2/token?"
-				+ "client_id=1000.GMB0YULZHJK411284S8I5GZ4CHUEX0&clientSecret=122c324d3496d5d777ceeebc129470715fbb856b7"
-				+ "&grantType=refresh_token&refreshToken=1000.18e983526f0ca8575ea9c53b0cd5bb58.1bd83a6f2e22c3a7e1309d96ae439cc1";
+		String expected = "https://accounts.zoho.com/oauth/v2/token?&"
+				+ "client_id=1000.GMB0YULZHJK411284S8I5GZ4CHUEX0&client_secret=122c324d3496d5d777ceeebc129470715fbb856b7&grant_type=refresh_token"
+				+ "&redirect_uri&refresh_token=1000.18e983526f0ca8575ea9c53b0cd5bb58.1bd83a6f2e22c3a7e1309d96ae439cc1";
 		System.out.println("testTokenPostRefresh");
 		System.out.println( expected );
 		System.out.println( tokenPost2.makeTokenUrl() );
