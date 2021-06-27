@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import okhttp3.HttpUrl;
 
+@Deprecated
 public class ZAuth {
 	//AUTH
 	public enum AuthRequestResponseType{ code }
@@ -77,8 +78,10 @@ public class ZAuth {
 			urlBuilder.addQueryParameter("client_id", clientId);
 			urlBuilder.addQueryParameter("grant_type", grantType.name());
 			urlBuilder.addQueryParameter("client_secret", clientSecret);
-			urlBuilder.addQueryParameter("scope", scopesCsv);
 			urlBuilder.addQueryParameter("redirect_uri", redirectUri);
+			if(scopesCsv!=null) {
+				urlBuilder.addQueryParameter("scope", scopesCsv);
+			}
 			if(accessType!=null) {
 				urlBuilder.addQueryParameter("access_type", accessType.name());
 			}
@@ -101,7 +104,7 @@ public class ZAuth {
 		private final Map<String, Object> tokenResponse;
 		@SuppressWarnings("unchecked")
 		public TokenResponse(String responseJsonString) {
-			this.tokenResponse = (Map<String, Object>) new Gson().fromJson(responseJsonString, Map.class);
+			this.tokenResponse = new Gson().fromJson(responseJsonString, Map.class);
 		}
 		public String get(TokenResponseField field) {
 			return (String) tokenResponse.get(field.name());
